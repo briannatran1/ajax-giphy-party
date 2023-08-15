@@ -2,7 +2,7 @@
 $(function() {
   const $gifArea = $('.gif-area');
 
-
+  /** Retrieves gif from Giphy API */
   async function retrieveGif(event){
     event.preventDefault();
 
@@ -19,6 +19,7 @@ $(function() {
 
   $('#search').on('click', retrieveGif);
 
+  /** Removes all gifs from gifArea when clicking on the remove images button */
   $('#remove').on('click', function(){
     $gifArea.empty();
   });
