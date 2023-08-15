@@ -8,13 +8,14 @@
 </head>
 
 <body>
-  <div class="dflex justify-content-center">
-    <h1>Giphy Party!</h1>
-    <form class="gif-form">
+  <div class="container">
+    <h1 class="d-flex justify-content-center">Giphy Party!</h1>
+    <form class="gif-form d-flex justify-content-center">
       <input type="text" class="search">
       <button class="btn btn-primary" type="submit" id="search">Search Giphy!</button>
-      <button class="btn btn-danger">Remove Images</button>
+      <button class="btn btn-danger" id="remove">Remove Images</button>
     </form>
+    <div class="gif-area"></div>
   </div>
 
   <script src="https://unpkg.com/jquery"></script>
