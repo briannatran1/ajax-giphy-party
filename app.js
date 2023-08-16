@@ -13,7 +13,12 @@ $(function() {
     const params = new URLSearchParams({api_key, q})
     let response = await fetch(`http://api.giphy.com/v1/gifs/search?${params}`);
 
+    console.log(response);
 
+    let $newGif = $("<img>", {
+      src: response.data[0].images.original.url
+    });
+    $gifArea.append($newGif);
 
   }
 
