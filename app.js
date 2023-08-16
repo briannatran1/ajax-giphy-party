@@ -11,8 +11,8 @@ async function getImagesFromGiphy(evt){
   $searchInput.val('');
 
   const params = new URLSearchParams({q: searchTerm, api_key: GIPHY_API_KEY});
-  const response = await fetch(`${GIPHY_BASE_URL}${params}`);
-  const gifData = await response.json();
+  const response = await fetch(`${GIPHY_BASE_URL}${params}`); // HTTP request to Giphy API
+  const gifData = await response.json(); // parses JSON response
 
   return gifData.data.map(image => image.images.original.url);
 }
@@ -31,19 +31,19 @@ function addImage(imageUrls) {
   }
 }
 
-/** Generates random index in an array */
+/** Generates random index from an array */
 function generateRandomIndex(array){
   return Math.floor(Math.random() * array.length);
 }
 
-/** Removes all gifs from gifArea when clicking on the remove images button */
+/** Removes gifs */
 function removeGif(){
   $gifArea.empty();
 }
 
 $('#remove').on('click', removeGif);
 
-/** On form submit, get imageUrls and add to list */
+/** On form submit, get image urls and add to list/gif container */
 async function handleSubmit(evt){
   evt.preventDefault();
 
