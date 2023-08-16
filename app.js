@@ -1,43 +1,54 @@
-// $(mainFunction); //loads DOM
-$(function() {
-  const $gifArea = $('.gif-area');
+'use strict';
 
-  /** Retrieves gif from Giphy API */
-  async function retrieveGif(event){
-    event.preventDefault();
+const $gifArea = $('.gif-area');
+const $searchInput = $('#search');
+const GIPHY_API_KEY = 'qVuTy0qY9wfLZxCn5E8ph4LVWchxe62q';
+const GIPHY_BASE_URL = 'http://api.giphy.com/v1/gifs/search?';
 
-    let userSearch = $('#search').val();
-    const api_key = "qVuTy0qY9wfLZxCn5E8ph4LVWchxe62q";
-    let q = `${userSearch}`;
+/** Get result from Giphy API. Returns list image URLs */
+async function getImagesFromGiphy(evt){
+  const searchTerm = $searchInput.val();
+  $searchInput.val('');
 
-    const params = new URLSearchParams({api_key, q})
-    let response = await fetch(`http://api.giphy.com/v1/gifs/search?${params}`);
-    let responseValue = response.json();
+  const params = new URLSearchParams({q: searchTerm, api_key: GIPHY_API_KEY});
+  const response = await fetch(`${GIPHY_BASE_URL}${params}`);
+  const gifData = await response.json();
 
-    console.log(response);
+  return gifData.data.map(image => image.images.original.url);
+}
 
-    let dataLength = responseValue.data.length;
-    let $newGif = $("<img>", {
-      src: responseValue.data[randomIndex(dataLength)].images.original.url
+/** Use ajax result to add gif to gifArea */
+function addImage(imageUrls) {
+  if(imageUrls.length > 0){
+    const randomIdx = generateRandomIndex(imageUrls);
+    const $newCol = $('<div>', {class: 'col-md-4 col-12 mb-4'});
+    const $newGif = $('<img>', {
+      src:imageUrls[randomIdx]
     });
-    $gifArea.append($newGif);
+
+  $newCol.append($newGif);
+  $gifArea.append($newCol);
   }
+}
 
-  function randomIndex(dataLength){
-    let randomIdx = Math.floor(Math.random() * dataLength);
-  }
+/** Generates random index in an array */
+function generateRandomIndex(array){
+  return Math.floor(Math.random() * array.length);
+}
 
-  $('#search').on('click', retrieveGif);
+/** Removes all gifs from gifArea when clicking on the remove images button */
+function removeGif(){
+  $gifArea.empty();
+}
 
-  /** Removes all gifs from gifArea when clicking on the remove images button */
-  $('#remove').on('click', function(){
-    $gifArea.empty();
-  });
-})
+$('#remove').on('click', removeGif);
 
+/** On form submit, get imageUrls and add to list */
+async function handleSubmit(evt){
+  evt.preventDefault();
 
+  const imageUrls = await getImagesFromGiphy();
+  addImage(imageUrls);
+}
 
-
-// console.log("Let's get this party started!");
-
-// api key = CuYWrRsOGdG3YNUuCgjavI1QueJ1bYEh
+$('form').on('submit', handleSubmit);
