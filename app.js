@@ -12,14 +12,19 @@ $(function() {
 
     const params = new URLSearchParams({api_key, q})
     let response = await fetch(`http://api.giphy.com/v1/gifs/search?${params}`);
+    let responseValue = response.json();
 
     console.log(response);
 
+    let dataLength = responseValue.data.length;
     let $newGif = $("<img>", {
-      src: response.data[0].images.original.url
+      src: responseValue.data[randomIndex(dataLength)].images.original.url
     });
     $gifArea.append($newGif);
+  }
 
+  function randomIndex(dataLength){
+    let randomIdx = Math.floor(Math.random() * dataLength);
   }
 
   $('#search').on('click', retrieveGif);
